@@ -61,7 +61,7 @@ public class UserService {
     public void addUser(RegisterUserRequest request) {
         validationService.validate(request);
         User user = new User();
-        Role role = roleRepository.findByRoleName("Admin")
+        Role role = roleRepository.findByRoleName(request.getRole())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found"));
         userRepository.findByEmail(request.getEmail())
                 .ifPresent(_ -> {

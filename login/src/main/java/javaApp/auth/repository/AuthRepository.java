@@ -1,4 +1,4 @@
-package javaApp.login.repository;
+package javaApp.auth.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -8,8 +8,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface LoginRepository extends JpaRepository<User, UUID> {
+public interface AuthRepository extends JpaRepository<User, UUID> {
     Optional<User> findByEmail(String email);
+
+    default User create(User user){
+        return save(user);
+    }
 
     default User update(User user) {
         return save(user);

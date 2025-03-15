@@ -1,6 +1,8 @@
-package javaApp.login.service;
+package javaApp.auth.service;
 
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,24 +10,25 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import javaApp.auth.model.LoginRequest;
+import javaApp.auth.model.LoginResponse;
+import javaApp.auth.model.RegisterRequest;
+import javaApp.auth.repository.AuthRepository;
+import javaApp.auth.security.BCrypt;
 import javaApp.entity.Role;
 import javaApp.entity.User;
-import javaApp.login.model.LoginRequest;
-import javaApp.login.model.LoginResponse;
-import javaApp.login.repository.LoginRepository;
-import javaApp.login.security.BCrypt;
 import javaApp.security.JwtService;
 import javaApp.users.repository.RoleRepository;
 import javaApp.users.service.ValidationService;
 
 @Service
 @Slf4j
-public class LoginService {
+public class AuthService {
     @Autowired
     private JwtService jwtService;
 
     @Autowired
-    private LoginRepository loginRepository;
+    private AuthRepository authRepository;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -34,9 +37,28 @@ public class LoginService {
     private ValidationService validationService;
 
     @Transactional
+    public void register(RegisterRequest request){
+        validationService.validate(request);
+        User user = new User();
+        Role role = roleRepository.findByRoleName(request.getRole())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found"));
+        authRepository.findByEmail(request.getEmail())
+                .ifPresent(_ -> {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists");
+                });
+        user.setId(UUID.randomUUID());
+        user.setEmail(request.getEmail());
+        user.setPassword(BCrypt.hashpw(request.getPassword(), BCrypt.gensalt()));
+        user.setRole(role);
+        user.setIsActive(true);
+        user.setIsLogin(true);
+        authRepository.create(user);
+    }
+
+    @Transactional
     public LoginResponse login(LoginRequest request) {
         validationService.validate(request);
-        User user = loginRepository.findByEmail(request.getEmail()).orElseThrow(
+        User user = authRepository.findByEmail(request.getEmail()).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
         if (BCrypt.checkpw(request.getPassword(), user.getPassword())) {
             User userUpdate = new User();
@@ -50,7 +72,7 @@ public class LoginService {
             userUpdate.setIsActive(user.getIsActive());
             userUpdate.setIsLogin(user.getIsLogin());
             userUpdate.setRole(role);
-            loginRepository.update(userUpdate);
+            authRepository.update(userUpdate);
             return LoginResponse.builder()
                     .accessToken(jwtService.generateTokenAccessToken(request.getEmail()))
                     .refreshToken(jwtService.generateTokenRefreshToken(request.getEmail()))

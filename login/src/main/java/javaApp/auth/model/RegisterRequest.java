@@ -1,8 +1,8 @@
-package javaApp.login.model;
+package javaApp.auth.model;
 
-import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LoginRequest {
-
+public class RegisterRequest {
+    @NotBlank
     @Email
     @Size(max = 100)
     private String email;
@@ -21,4 +21,7 @@ public class LoginRequest {
     @NotBlank
     @Size(max = 100)
     private String password;
+
+    @NotBlank
+    private String role;
 }

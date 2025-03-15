@@ -1,4 +1,4 @@
-package javaApp.login.model;
+package javaApp.auth.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

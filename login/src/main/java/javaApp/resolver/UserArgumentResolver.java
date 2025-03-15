@@ -29,12 +29,12 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
     private JwtService jwtService;
 
     @Override
-    public boolean supportsParameter(MethodParameter parameter) {
+    public boolean supportsParameter(@SuppressWarnings("null") MethodParameter parameter) {
         return User.class.equals(parameter.getParameterType());
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+    public Object resolveArgument(@SuppressWarnings("null") MethodParameter parameter, @SuppressWarnings("null") ModelAndViewContainer mavContainer, @SuppressWarnings("null") NativeWebRequest webRequest, @SuppressWarnings("null") WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest servletRequest = (HttpServletRequest) webRequest.getNativeRequest();
         String token = servletRequest.getHeader("Authorization");
         if (token == null) {
