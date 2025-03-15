@@ -13,7 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javaApp.auth.model.LoginRequest;
 import javaApp.auth.model.LoginResponse;
 import javaApp.auth.model.RegisterRequest;
-import javaApp.auth.repository.AuthRepository;
+import javaApp.auth.repository.UserRepository;
 import javaApp.auth.security.BCrypt;
 import javaApp.entity.Role;
 import javaApp.entity.User;
@@ -28,7 +28,7 @@ public class AuthService {
     private JwtService jwtService;
 
     @Autowired
-    private AuthRepository authRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -42,7 +42,7 @@ public class AuthService {
         User user = new User();
         Role role = roleRepository.findByRoleName(request.getRole())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found"));
-        authRepository.findByEmail(request.getEmail())
+        userRepository.findByEmail(request.getEmail())
                 .ifPresent(_ -> {
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists");
                 });
@@ -52,13 +52,13 @@ public class AuthService {
         user.setRole(role);
         user.setIsActive(true);
         user.setIsLogin(true);
-        authRepository.create(user);
+        userRepository.create(user);
     }
 
     @Transactional
     public LoginResponse login(LoginRequest request) {
         validationService.validate(request);
-        User user = authRepository.findByEmail(request.getEmail()).orElseThrow(
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
         if (BCrypt.checkpw(request.getPassword(), user.getPassword())) {
             User userUpdate = new User();
@@ -72,7 +72,7 @@ public class AuthService {
             userUpdate.setIsActive(user.getIsActive());
             userUpdate.setIsLogin(user.getIsLogin());
             userUpdate.setRole(role);
-            authRepository.update(userUpdate);
+            userRepository.update(userUpdate);
             return LoginResponse.builder()
                     .accessToken(jwtService.generateTokenAccessToken(request.getEmail()))
                     .refreshToken(jwtService.generateTokenRefreshToken(request.getEmail()))
