@@ -13,7 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javaApp.auth.model.LoginRequest;
 import javaApp.auth.model.LoginResponse;
 import javaApp.auth.model.RegisterRequest;
-import javaApp.auth.repository.UserRepository;
+import javaApp.auth.repository.UserAuthRepository;
 import javaApp.auth.security.BCrypt;
 import javaApp.entity.Role;
 import javaApp.entity.User;
@@ -28,7 +28,7 @@ public class AuthService {
     private JwtService jwtService;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserAuthRepository userRepository;
 
     @Autowired
     private RoleRepository roleRepository;

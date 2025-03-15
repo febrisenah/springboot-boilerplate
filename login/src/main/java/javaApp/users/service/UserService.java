@@ -16,7 +16,6 @@ import javaApp.users.model.UserResponse;
 import javaApp.users.repository.RoleRepository;
 import javaApp.users.repository.UserRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -74,10 +73,6 @@ public class UserService {
         user.setIsActive(true);
         user.setIsLogin(true);
         userRepository.createAndSaveUser(user);
-    }
-
-    public List<UserResponse> getUsers() {
-        return new ArrayList<>();
     }
 
     public List<UserResponse> getAllUsers(User user) {
