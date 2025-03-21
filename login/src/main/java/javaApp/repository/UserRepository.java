@@ -1,4 +1,4 @@
-package javaApp.users.repository;
+package javaApp.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -28,6 +28,14 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     default User getUserByEmail(String email) {
         return findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("User not found for email: " + email));
+    }
+
+     default User create(User user){
+        return save(user);
+    }
+
+    default User updateUser(User user) {
+        return save(user);
     }
 
     default User update(UUID userId, UpdateUserRequest request) {

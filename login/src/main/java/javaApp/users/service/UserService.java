@@ -13,8 +13,8 @@ import javaApp.security.BCrypt;
 import javaApp.users.model.RegisterUserRequest;
 import javaApp.users.model.UpdateUserRequest;
 import javaApp.users.model.UserResponse;
-import javaApp.users.repository.RoleRepository;
-import javaApp.users.repository.UserRepository;
+import javaApp.repository.RoleRepository;
+import javaApp.repository.UserRepository;
 
 import java.util.List;
 import java.util.UUID;

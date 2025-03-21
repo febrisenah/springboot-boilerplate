@@ -13,12 +13,12 @@ import org.springframework.web.server.ResponseStatusException;
 import javaApp.auth.model.LoginRequest;
 import javaApp.auth.model.LoginResponse;
 import javaApp.auth.model.RegisterRequest;
-import javaApp.auth.repository.UserAuthRepository;
+import javaApp.repository.UserRepository;
 import javaApp.auth.security.BCrypt;
 import javaApp.entity.Role;
 import javaApp.entity.User;
 import javaApp.security.JwtService;
-import javaApp.users.repository.RoleRepository;
+import javaApp.repository.RoleRepository;
 import javaApp.users.service.ValidationService;
 
 @Service
@@ -28,7 +28,7 @@ public class AuthService {
     private JwtService jwtService;
 
     @Autowired
-    private UserAuthRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -72,7 +72,7 @@ public class AuthService {
             userUpdate.setIsActive(user.getIsActive());
             userUpdate.setIsLogin(user.getIsLogin());
             userUpdate.setRole(role);
-            userRepository.update(userUpdate);
+            userRepository.updateUser(userUpdate);
             return LoginResponse.builder()
                     .accessToken(jwtService.generateTokenAccessToken(request.getEmail()))
                     .refreshToken(jwtService.generateTokenRefreshToken(request.getEmail()))

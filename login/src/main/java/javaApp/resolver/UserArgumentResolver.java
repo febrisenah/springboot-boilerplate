@@ -16,7 +16,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.server.ResponseStatusException;
 import javaApp.entity.User;
 import javaApp.security.JwtService;
-import javaApp.users.repository.UserRepository;
+import javaApp.repository.UserRepository;
 
 @Component
 @Slf4j
@@ -41,6 +41,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
         }
         Map<String, Object> claims = jwtService.decodeToken(token.split(" ")[1]);
+        System.out.println(claims);
         String email = claims.get("sub").toString();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized"));
