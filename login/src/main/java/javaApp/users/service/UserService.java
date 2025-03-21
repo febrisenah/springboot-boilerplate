@@ -63,9 +63,7 @@ public class UserService {
         Role role = roleRepository.findByRoleName(request.getRole())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found"));
         userRepository.findByEmail(request.getEmail())
-                .ifPresent(_ -> {
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists");
-                });
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Email Already Exist"));
         user.setId(UUID.randomUUID());
         user.setEmail(request.getEmail());
         user.setPassword(BCrypt.hashpw(request.getPassword(), BCrypt.gensalt()));
@@ -76,7 +74,6 @@ public class UserService {
     }
 
     public List<UserResponse> getAllUsers(User user) {
-        System.out.println(user);
         return userRepository.getAllUserResponses();
     }
 }
