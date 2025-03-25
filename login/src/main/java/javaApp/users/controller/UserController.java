@@ -3,8 +3,10 @@ package javaApp.users.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javaApp.entity.User;
+import javaApp.users.model.ProfileUserRequest;
 import javaApp.users.model.RegisterUserRequest;
 import javaApp.users.model.UpdateUserRequest;
 import javaApp.users.model.UserResponse;
@@ -19,6 +21,12 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @PostMapping(value = "/api/profile", consumes = "multipart/form-data")
+    public WebResponse<String> handleFileUpload(@ModelAttribute ProfileUserRequest request) {
+        userService.profile(request);
+        return  WebResponse.<String>builder().data("OK").build();
+    }
 
     @PostMapping(path = "/api/users", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public WebResponse<String> addUser(User user, @RequestBody RegisterUserRequest request) {
