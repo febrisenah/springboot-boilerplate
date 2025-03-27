@@ -25,8 +25,6 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
-import javax.management.RuntimeErrorException;
-
 @Service
 @Slf4j
 public class UserService {
@@ -44,7 +42,7 @@ public class UserService {
         try {
             validationService.validate(request);
             MultipartFile file = request.getFile();
-            String folderPath = System.getProperty("user.dir") + "/uploads"; // Absolute path
+            String folderPath = System.getProperty("user.dir") + "/uploads";
             Path folder = Paths.get(folderPath);
             if (!Files.exists(folder)) {
                 Files.createDirectories(folder);

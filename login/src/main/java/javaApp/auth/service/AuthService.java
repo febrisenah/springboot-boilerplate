@@ -14,7 +14,7 @@ import javaApp.auth.model.LoginRequest;
 import javaApp.auth.model.LoginResponse;
 import javaApp.auth.model.RegisterRequest;
 import javaApp.repository.UserRepository;
-import javaApp.auth.security.BCrypt;
+import javaApp.security.BCrypt;
 import javaApp.entity.Role;
 import javaApp.entity.User;
 import javaApp.security.JwtService;

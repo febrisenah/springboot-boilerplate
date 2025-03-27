@@ -30,7 +30,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
                 .orElseThrow(() -> new IllegalArgumentException("User not found for email: " + email));
     }
 
-     default User create(User user){
+    default User create(User user){
         return save(user);
     }
 
@@ -70,7 +70,8 @@ public interface UserRepository extends JpaRepository<User, UUID> {
                         .isActive(user.getIsActive())
                         .isLogin(user.getIsLogin())
                         .id(user.getId())
-                        .build())
+                        .build()
+                )
                 .collect(Collectors.toList());
     }
 }

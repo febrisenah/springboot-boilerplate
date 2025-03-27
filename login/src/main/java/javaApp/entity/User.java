@@ -22,7 +22,7 @@ public class User {
     @Transient
     private UUID roleId;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role role;
 
