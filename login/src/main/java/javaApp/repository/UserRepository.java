@@ -6,13 +6,11 @@ import org.springframework.stereotype.Repository;
 import javaApp.entity.User;
 import javaApp.security.BCrypt;
 import javaApp.users.model.UpdateUserRequest;
-import javaApp.users.model.UserResponse;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
@@ -57,21 +55,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
         return save(user);
     }
 
-    default List<UserResponse> getAllUserResponses() {
-        return findAll().stream()
-                .map(user -> UserResponse.builder()
-                        .role(
-                                UserResponse.RoleDetails.builder()
-                                        .id(user.getRole().getId())
-                                        .roleName(user.getRole().getRoleName())
-                                        .build())
-                        .email(user.getEmail())
-                        .password(user.getPassword())
-                        .isActive(user.getIsActive())
-                        .isLogin(user.getIsLogin())
-                        .id(user.getId())
-                        .build()
-                )
-                .collect(Collectors.toList());
+    default List<User> getAllUserResponses() {
+        return findAll();
     }
 }

@@ -23,6 +23,7 @@ public class ProductRequest {
     private MultipartFile coverImage;
     private String subDescription;
     private Integer available;
+    private Integer price;
     private String inventoryType;
     private Boolean newLabelEnabled;
     private String newLabelContent;

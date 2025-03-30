@@ -19,6 +19,7 @@ public class Product {
     private String subDescription;
     private String coverUrl;
     private Integer available;
+    private Integer price;
     private String inventoryType;
     private Boolean newLabelEnabled;
     private String newLabelContent;

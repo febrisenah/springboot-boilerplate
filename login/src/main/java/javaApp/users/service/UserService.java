@@ -24,6 +24,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -112,7 +113,19 @@ public class UserService {
 
     public List<UserResponse> getAllUsers(User user) {
         try {
-            return userRepository.getAllUserResponses();
+            return userRepository.getAllUserResponses().stream()
+                .map(users -> UserResponse.builder()
+                        .role(UserResponse.RoleDetails.builder()
+                                .id(users.getRole().getId())
+                                .roleName(users.getRole().getRoleName())
+                                .build())
+                        .email(users.getEmail())
+                        .password(users.getPassword())
+                        .isActive(users.getIsActive())
+                        .isLogin(users.getIsLogin())
+                        .id(users.getId())
+                        .build())
+                .collect(Collectors.toList());
         } catch (Exception e) {
             throw new RuntimeException("Error", e);
         }

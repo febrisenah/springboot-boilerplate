@@ -1,4 +1,4 @@
-package javaApp.users.controller;
+package javaApp.product.controller;
 
 import jakarta.validation.ConstraintViolationException;
 import javaApp.users.model.WebResponse;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestControllerAdvice
-public class ErrorController {
+public class ProductErrorController {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<WebResponse<String>> constraintViolationException(ConstraintViolationException exception) {
